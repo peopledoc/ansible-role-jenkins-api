@@ -48,10 +48,13 @@ passed in as parameters) is always nice for users too:
             command: node_exists
             args:
               - node-1
+          register: result
+        - debug:
+            var: result.node_exists
 
-*Note:* `jenkins-api` module put the api result dictionary as facts using
-the command name as key. For example, the previous task result is stored as
-`node_exists`.
+*Note:* `jenkins-api` module put the api result dictionary with the command
+name as key. For example, the previous task result is stored as
+`result.node_exists`.
 
 Copyright
 ---------

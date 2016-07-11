@@ -66,8 +66,7 @@ def _jenkins_credentials(jenkins_url=None, **kwargs):
         'cmd': jenkins_url,
         'changed': False,
         'failed': True,
-        'stdout_lines': '',
-        'stderr_lines': '',
+        'msg': '',
         'rc': 1
     }
 
@@ -79,16 +78,14 @@ def _jenkins_credentials(jenkins_url=None, **kwargs):
     try:
         output = server.run_script(groovy)
         if 'Error' in output or 'Exception' in output:
-            result['stderr_lines'] = [output]
+            result['msg'] = output
             return result
 
     except jenkins.JenkinsException as e:
-        result['stderr_lines'] = [e.message]
+        result['msg'] = e.message
         return result
 
-    result['ansible_facts'] = {
-        'jenkins_credentials': output,
-    }
+    result['jenkins_credentials'] = output
     result['changed'] = True
     result['failed'] = False
     result['rc'] = 0
