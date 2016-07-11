@@ -1,0 +1,17 @@
+galaxy_info:
+
+  author: Florent PIGOUT
+  company: PeopleDoc
+  description: Install jenkins-python + include ansible binding module
+  license: BSD
+
+  min_ansible_version: 2.0
+
+  platforms:
+  - name: Debian
+    versions:
+    - jessie
+
+  galaxy_tags: [jenkins, api]
+
+dependencies: []
