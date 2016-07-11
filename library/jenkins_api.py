@@ -10,15 +10,14 @@ def _jenkins_api(jenkins_url=None, command=None, args=None, kwargs=None):
         'cmd': '{} {} {}'.format(jenkins_url, args, kwargs),
         'changed': False,
         'failed': True,
-        'stdout_lines': '',
-        'stderr_lines': '',
+        'msg': '',
         'rc': 1
     }
 
     server = jenkins.Jenkins(jenkins_url)
 
     if not hasattr(server, command):
-        result['stderr_lines'] = ['Unknown command: {}'.format(command)]
+        result['msg'] = 'Unknown command: {}'.format(command)
         return result
 
     cmd = partial(getattr(server, command))
@@ -27,11 +26,9 @@ def _jenkins_api(jenkins_url=None, command=None, args=None, kwargs=None):
     if kwargs:
         cmd = partial(cmd, **kwargs)
     try:
-        result['ansible_facts'] = {
-            command: cmd()
-        }
+        result[command] = cmd()
     except jenkins.JenkinsException as e:
-        result['stderr_lines'] = [e.message]
+        result['msg'] = e.message
         return result
 
     result['changed'] = True
